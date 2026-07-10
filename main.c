@@ -1,22 +1,3 @@
-/* ============================================================================
- *  PHONEBOOK MANAGER
- *  A console-based contact management system written in C.
- *
- *  Features:
- *    - Password-protected access (first-run setup + masked input)
- *    - Add / Search / Modify / Delete records
- *    - List all records in a formatted table
- *    - Sort records alphabetically by name
- *    - Export all records to CSV
- *    - Binary file storage (records.dat) for fast, reliable I/O
- *
- *  Build (Windows, MinGW / Dev-C++ / Code::Blocks):
- *      gcc main.c -o phonebook.exe
- *
- *  Note: this project targets Windows because it uses <conio.h> and
- *  <windows.h> for masked password input and colored console output.
- * ============================================================================
- */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,9 +6,7 @@
 #include <conio.h>
 #include <windows.h>
 
-/* ---------------------------------------------------------------------- */
-/*  Constants                                                              */
-/* ---------------------------------------------------------------------- */
+
 #define MAX_NAME    100
 #define MAX_ADDR    200
 #define MAX_MAIL    100
@@ -45,9 +24,7 @@
 #define COLOR_YELLOW  14
 #define COLOR_CYAN    11
 
-/* ---------------------------------------------------------------------- */
-/*  Data structure                                                         */
-/* ---------------------------------------------------------------------- */
+
 typedef struct {
     char name[MAX_NAME];
     char address[MAX_ADDR];
@@ -55,9 +32,7 @@ typedef struct {
     char phone[MAX_PHONE];
 } Record;
 
-/* ---------------------------------------------------------------------- */
-/*  Prototypes                                                             */
-/* ---------------------------------------------------------------------- */
+
 void setColor(int color);
 void printHeader(const char *title);
 void pauseScreen(void);
@@ -81,9 +56,7 @@ void sortRecordsByName(void);
 void exportToCSV(void);
 void exitProgram(void);
 
-/* ---------------------------------------------------------------------- */
-/*  Entry point                                                            */
-/* ---------------------------------------------------------------------- */
+
 int main(void) {
     if (authenticate()) {
         mainMenu();
@@ -91,9 +64,7 @@ int main(void) {
     return 0;
 }
 
-/* ---------------------------------------------------------------------- */
-/*  Utility helpers                                                        */
-/* ---------------------------------------------------------------------- */
+
 void setColor(int color) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hConsole, (WORD)color);
@@ -113,8 +84,7 @@ void pauseScreen(void) {
     getch();
 }
 
-/* Safely discards leftover characters in stdin (replaces undefined
- * behaviour of fflush(stdin) used in the original version). */
+
 void clearInputBuffer(void) {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
@@ -135,8 +105,7 @@ void toLowerStr(const char *src, char *dst) {
     dst[i] = '\0';
 }
 
-/* Case-insensitive string comparison (portable replacement for
- * stricmp/strcasecmp, which are not standard across compilers). */
+
 int strcicmp(const char *a, const char *b) {
     while (*a && *b) {
         int diff = tolower((unsigned char)*a) - tolower((unsigned char)*b);
@@ -147,14 +116,14 @@ int strcicmp(const char *a, const char *b) {
     return tolower((unsigned char)*a) - tolower((unsigned char)*b);
 }
 
-/* Reads a line of text safely with fgets() instead of the unsafe gets(). */
+
 void getStringInput(char *buffer, int size, const char *prompt) {
     printf("%s", prompt);
     fgets(buffer, size, stdin);
     trimNewline(buffer);
 }
 
-/* Reads masked (password-style) input using conio's getch(). */
+
 void readMaskedInput(char *buffer, int size) {
     int i = 0;
     char ch;
@@ -175,15 +144,7 @@ void readMaskedInput(char *buffer, int size) {
     buffer[i] = '\0';
 }
 
-/* ---------------------------------------------------------------------- */
-/*  Authentication                                                         */
-/* ---------------------------------------------------------------------- */
 
-/* Runs once, the very first time the program is launched (no password
- * file exists yet), and lets the user create their own password.
- * Note: the password is stored in plain text for simplicity, which is
- * fine for a personal/local student project but should not be used
- * for anything security-sensitive. */
 void setupPassword(void) {
     char pwd[MAX_PWD], confirm[MAX_PWD];
 
@@ -228,8 +189,7 @@ void setupPassword(void) {
     Sleep(1200);
 }
 
-/* Prompts for a password (up to 3 attempts) and checks it against the
- * one stored in password.dat. Creates a password on first run. */
+
 int authenticate(void) {
     FILE *fp = fopen(PASSWORD_FILE, "r");
     if (fp == NULL) {
@@ -278,9 +238,7 @@ int authenticate(void) {
     return 0;
 }
 
-/* ---------------------------------------------------------------------- */
-/*  Main menu                                                              */
-/* ---------------------------------------------------------------------- */
+
 void mainMenu(void) {
     int choice;
 
@@ -320,9 +278,7 @@ void mainMenu(void) {
     }
 }
 
-/* ---------------------------------------------------------------------- */
-/*  Add                                                                     */
-/* ---------------------------------------------------------------------- */
+
 void addRecord(void) {
     char more = 'y';
 
@@ -357,9 +313,7 @@ void addRecord(void) {
     }
 }
 
-/* ---------------------------------------------------------------------- */
-/*  Search                                                                  */
-/* ---------------------------------------------------------------------- */
+
 void searchRecord(void) {
     system("cls");
     printHeader("Search Record");
@@ -408,9 +362,7 @@ void searchRecord(void) {
     pauseScreen();
 }
 
-/* ---------------------------------------------------------------------- */
-/*  Modify                                                                  */
-/* ---------------------------------------------------------------------- */
+
 void modifyRecord(void) {
     system("cls");
     printHeader("Modify Record");
@@ -488,9 +440,7 @@ void modifyRecord(void) {
     pauseScreen();
 }
 
-/* ---------------------------------------------------------------------- */
-/*  Delete                                                                  */
-/* ---------------------------------------------------------------------- */
+
 void deleteRecord(void) {
     system("cls");
     printHeader("Delete Record");
@@ -531,7 +481,7 @@ void deleteRecord(void) {
 
             if (confirm == 'y' || confirm == 'Y') {
                 deleted = 1;
-                continue; /* skip writing this record -> it gets removed */
+                continue; 
             }
         }
         fwrite(&r, sizeof(Record), 1, temp);
@@ -556,9 +506,7 @@ void deleteRecord(void) {
     pauseScreen();
 }
 
-/* ---------------------------------------------------------------------- */
-/*  List                                                                    */
-/* ---------------------------------------------------------------------- */
+
 void listRecords(void) {
     system("cls");
     printHeader("All Records");
@@ -648,9 +596,7 @@ void sortRecordsByName(void) {
     pauseScreen();
 }
 
-/* ---------------------------------------------------------------------- */
-/*  Export                                                                  */
-/* ---------------------------------------------------------------------- */
+
 void exportToCSV(void) {
     system("cls");
     printHeader("Export to CSV");
@@ -687,9 +633,7 @@ void exportToCSV(void) {
     pauseScreen();
 }
 
-/* ---------------------------------------------------------------------- */
-/*  Exit                                                                    */
-/* ---------------------------------------------------------------------- */
+
 void exitProgram(void) {
     system("cls");
     setColor(COLOR_CYAN);
