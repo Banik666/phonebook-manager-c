@@ -7,14 +7,14 @@ extended with proper file handling, input validation, and a few extra features.
 
 ## Features
 
-- 🔒 **Password-protected access** — set your own password on first run (masked input, 3 login attempts)
-- ➕ **Add** contacts (name, address, email, phone)
-- 🔍 **Search** contacts by name (partial, case-insensitive match)
-- ✏️ **Modify** existing contacts (keep old value by pressing Enter)
-- 🗑️ **Delete** contacts (with confirmation prompt)
-- 📋 **List** all contacts in a formatted table
-- 🔤 **Sort** contacts alphabetically by name
-- 📤 **Export** all contacts to a CSV file
+-  **Password-protected access** — set your own password on first run (masked input, 3 login attempts)
+-  **Add** contacts (name, address, email, phone)
+-  **Search** contacts by name (partial, case-insensitive match)
+-  **Modify** existing contacts (keep old value by pressing Enter)
+-  **Delete** contacts (with confirmation prompt)
+-  **List** all contacts in a formatted table
+-  **Sort** contacts alphabetically by name
+-  **Export** all contacts to a CSV file
 - Colored console output for a nicer terminal experience
 
 ## Tech notes
